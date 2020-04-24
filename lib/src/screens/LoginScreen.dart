@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const routeName = '/login';
   @override
   State<StatefulWidget> createState() => LoginScreenState();
 }

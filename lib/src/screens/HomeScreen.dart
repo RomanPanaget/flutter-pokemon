@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName = '/home';
   @override
   State<StatefulWidget> createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,18 +21,22 @@ class HomeScreenState extends State<HomeScreen> {
             Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
               Expanded(
                   child: DrawerHeader(
-                child: Text("Drawer header"),
+                child: Image(
+                    image: AssetImage(
+                  'assets/pokeball.png'
+                ), height: 44.0),
                 margin: EdgeInsets.zero,
-                decoration: BoxDecoration(color: Colors.blue),
               ))
             ]),
             ListTile(
+              leading: Icon(Icons.search),
               title: Text("Search Pokemon"),
               onTap: () {
                 Navigator.pushNamed(context, "/search");
               },
             ),
             ListTile(
+              leading: Icon(Icons.pets),
               title: Text("Pokedex"),
               onTap: () {
                 Navigator.pushNamed(context, "/pokedex");
@@ -39,9 +45,13 @@ class HomeScreenState extends State<HomeScreen> {
             Expanded(
               flex: 1,
               child: Align(
-                  alignment: Alignment.bottomCenter, child: IconButton(icon: Icon(Icons.power_settings_new), onPressed: () {
-                    Navigator.pushReplacementNamed(context, "/login");
-              },)),
+                  alignment: Alignment.bottomCenter,
+                  child: IconButton(
+                    icon: Icon(Icons.power_settings_new),
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, "/login");
+                    },
+                  )),
             ),
           ],
         ),

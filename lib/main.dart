@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/screens/HomeScreen.dart';
 import 'package:flutterpokemon/src/screens/LoginScreen.dart';
 import 'package:flutterpokemon/src/screens/PokedexScreen.dart';
+import 'package:flutterpokemon/src/screens/PokemonDetailScreen.dart';
 import 'package:flutterpokemon/src/screens/SearchScreen.dart';
 import 'package:flutterpokemon/src/screens/SplashScreen.dart';
 
@@ -14,20 +16,23 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Pokemon App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: SplashScreen(),
       initialRoute: '/',
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {
-          case '/home':
+          case HomeScreen.routeName:
             return MaterialPageRoute(builder: (_) => HomeScreen());
-          case '/login':
+          case LoginScreen.routeName:
             return MaterialPageRoute(builder: (_) => LoginScreen());
-          case '/search':
+          case SearchScreen.routeName:
             return MaterialPageRoute(builder: (_) => SearchScreen());
-          case '/pokedex':
+          case PokedexScreen.routeName:
             return MaterialPageRoute(builder: (_) => PokedexScreen());
+          case PokemonDetailScreen.routeName:
+            final PokemonModel pokemon = settings.arguments;
+            return MaterialPageRoute(builder: (_) => PokemonDetailScreen(pokemon));
         }
         return null;
       },

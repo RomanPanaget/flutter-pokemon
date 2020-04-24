@@ -1,15 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutterpokemon/src/models/PokemonModel.dart';
 
-class LoginScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => LoginScreenState();
-}
+class PokemonDetailScreen extends StatelessWidget {
+  static const routeName = '/detail';
 
-class LoginScreenState extends State<LoginScreen> {
+  final PokemonModel pokemon;
+  PokemonDetailScreen(this.pokemon);
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("Login"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(this.pokemon.name),
+      ),
     );
   }
 }

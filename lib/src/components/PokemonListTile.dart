@@ -25,8 +25,11 @@ class PokemonListTile extends StatelessWidget {
           fontSize: 20,
         ),
       ),
-      trailing: Image.network(
-          "https://pokeres.bastionbot.org/images/pokemon/${this.pokemon.id}.png"),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+        Image.network(
+            "https://pokeres.bastionbot.org/images/pokemon/${this.pokemon.id}.png"),
+        Padding(padding: EdgeInsets.only(left: 10),child:Icon(Icons.chevron_right))
+      ]),
       onTap: () {
         Navigator.pushNamed(context, "/detail", arguments: this.pokemon);
       },

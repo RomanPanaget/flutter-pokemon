@@ -12,7 +12,7 @@ class PokedexScreen extends StatefulWidget {
 }
 
 class _PokedexScreenState extends State<PokedexScreen> {
-  PokemonService _service;
+  final PokemonService _service = PokemonService();
   List<PokemonModel> _pokemons;
 
   final _formKey = GlobalKey<FormState>();
@@ -22,7 +22,6 @@ class _PokedexScreenState extends State<PokedexScreen> {
   @override
   void initState() {
     super.initState();
-    _service = PokemonService();
     _pokemons = [];
     fetchPokemons();
   }
@@ -33,6 +32,16 @@ class _PokedexScreenState extends State<PokedexScreen> {
     setState(() {
       _pokemons = pokemons;
     });
+  }
+
+  _onSubmit() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      setState(() {
+        _pokemons = [];
+      });
+      fetchPokemons();
+    }
   }
 
   @override
@@ -57,15 +66,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                   keyboardType: TextInputType.number,
                                   maxLength: 4,
                                   initialValue: '$firstId',
-                                  onFieldSubmitted: (v) {
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState.save();
-                                      setState(() {
-                                        _pokemons = [];
-                                      });
-                                      fetchPokemons();
-                                    }
-                                  },
+                                  onFieldSubmitted: (v) => _onSubmit(),
                                   validator: (value) {
                                     if (value.isEmpty ||
                                         (int.tryParse(value) ?? "") is! int) {
@@ -92,21 +93,11 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                   validator: (value) {
                                     if (value.isEmpty ||
                                         (int.tryParse(value) ?? "") is! int) {
-                                      print(value.isEmpty);
-                                      print(value is int);
                                       return 'Enter a number';
                                     }
                                     return null;
                                   },
-                                  onFieldSubmitted: (v) {
-                                    if (_formKey.currentState.validate()) {
-                                      _formKey.currentState.save();
-                                      setState(() {
-                                        _pokemons = [];
-                                      });
-                                      fetchPokemons();
-                                    }
-                                  },
+                                  onFieldSubmitted: (v) => _onSubmit(),
                                   onSaved: (v) {
                                     count = int.tryParse(v) ?? 0;
                                   },
@@ -119,15 +110,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               color: Colors.red,
-                              onPressed: () {
-                                if (_formKey.currentState.validate()) {
-                                  _formKey.currentState.save();
-                                  setState(() {
-                                    _pokemons = [];
-                                  });
-                                  fetchPokemons();
-                                }
-                              },
+                              onPressed: _onSubmit,
                             )),
                       ],
                     )),

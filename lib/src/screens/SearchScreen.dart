@@ -41,6 +41,7 @@ class _SearchScreenState extends State<SearchScreen> {
         title: Text("Search"),
       ),
       body: Column(
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Form(
             key: _formKey,
@@ -51,6 +52,10 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               title: TextFormField(
                 initialValue: _currentSearch,
+                expands: false,
+                decoration: InputDecoration(
+                  labelText: "Enter a name or an ID",
+                ),
                 onFieldSubmitted: (v) => _onSubmit(),
                 validator: (value) {
                   if (value.isEmpty) {
@@ -66,9 +71,11 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           _pokemon != null
               ? PokemonListTile(pokemon: _pokemon)
-              : Text(_currentSearch.isEmpty
-                  ? "Try searching for something"
-                  : "We couldn't find any pokemon with \"$_currentSearch\"")
+              : Expanded(
+                  child: Center(
+                      child: Text(_currentSearch.isEmpty
+                          ? "Try searching for something"
+                          : "We couldn't find any pokemon with \"$_currentSearch\"")))
         ],
       ),
     );

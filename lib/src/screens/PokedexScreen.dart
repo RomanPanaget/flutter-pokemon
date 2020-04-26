@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterpokemon/src/components/PokemonListTile.dart';
+import 'package:flutterpokemon/src/components/PokemonListCard.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/services/PokemonService.dart';
 
@@ -115,12 +115,9 @@ class _PokedexScreenState extends State<PokedexScreen> {
                       ],
                     )),
                 Expanded(
-                    child: ListView.separated(
-                  separatorBuilder: (_, __) => Divider(
-                    color: Color.fromRGBO(0, 0, 0, 0.4),
-                  ),
+                    child: ListView.builder(
                   itemBuilder: (context, i) =>
-                      PokemonListTile(pokemon: this._pokemons[i]),
+                      PokemonListCard(pokemon: this._pokemons[i]),
                   itemCount: this._pokemons.length,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,

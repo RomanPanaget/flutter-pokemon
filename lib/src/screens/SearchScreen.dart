@@ -14,12 +14,22 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final _formKey = GlobalKey<FormState>();
   final PokemonService _service = PokemonService();
-  PokemonModel _pokemon;
   String _currentSearch = "";
+
+  PokemonModel _pokemon;
+  bool _loading;
+
+  @override
+  void initState() {
+    super.initState();
+    _pokemon = null;
+    _loading = false;
+  }
 
   _fetchPokemon() async {
     PokemonModel pokemon = await this._service.fetchPokemon(_currentSearch);
     setState(() {
+      _loading = false;
       _pokemon = pokemon;
     });
   }
@@ -29,6 +39,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _formKey.currentState.save();
       setState(() {
         _pokemon = null;
+        _loading = true;
       });
       _fetchPokemon();
     }
@@ -69,13 +80,15 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
           ),
-          _pokemon != null
-              ? PokemonListCard(pokemon: _pokemon)
-              : Expanded(
-                  child: Center(
-                      child: Text(_currentSearch.isEmpty
-                          ? "Try searching for something"
-                          : "We couldn't find any pokemon with \"$_currentSearch\"")))
+          _loading
+              ? Expanded(child: Center(child: CircularProgressIndicator()))
+              : _pokemon == null
+                  ? Expanded(
+                      child: Center(
+                          child: Text(_currentSearch.isEmpty
+                              ? "Try searching for something"
+                              : "We couldn't find any pokemon with \"$_currentSearch\"")))
+                  : PokemonListCard(pokemon: _pokemon)
         ],
       ),
     );

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
+
   @override
   State<StatefulWidget> createState() => HomeScreenState();
 }
 
 class HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,33 +22,37 @@ class HomeScreenState extends State<HomeScreen> {
               Expanded(
                   child: DrawerHeader(
                 child: Image(
-                    image: AssetImage(
-                  'assets/pokeball.png'
-                ), height: 44.0),
+                    image: AssetImage('assets/pokeball.png'), height: 44.0),
                 margin: EdgeInsets.zero,
               ))
             ]),
-            ListTile(
-              leading: Icon(Icons.pets),
-              title: Text("Pokedex"),
-              onTap: () {
-                Navigator.pushNamed(context, "/pokedex");
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.search),
-              title: Text("Search"),
-              onTap: () {
-                Navigator.pushNamed(context, "/search");
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.favorite),
-              title: Text("Favorites"),
-              onTap: () {
-                Navigator.pushNamed(context, "/favorites");
-              },
-            ),
+            Expanded(
+                child: ListView(
+              physics: NeverScrollableScrollPhysics(),
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.pets),
+                  title: Text("Pokedex"),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/pokedex");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text("Search"),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/search");
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.favorite),
+                  title: Text("Favorites"),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/favorites");
+                  },
+                ),
+              ],
+            )),
             Expanded(
               flex: 1,
               child: Align(

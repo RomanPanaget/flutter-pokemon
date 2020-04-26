@@ -29,17 +29,17 @@ class HomeScreenState extends State<HomeScreen> {
               ))
             ]),
             ListTile(
-              leading: Icon(Icons.search),
-              title: Text("Search Pokemon"),
-              onTap: () {
-                Navigator.pushNamed(context, "/search");
-              },
-            ),
-            ListTile(
               leading: Icon(Icons.pets),
               title: Text("Pokedex"),
               onTap: () {
                 Navigator.pushNamed(context, "/pokedex");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.search),
+              title: Text("Search"),
+              onTap: () {
+                Navigator.pushNamed(context, "/search");
               },
             ),
             ListTile(

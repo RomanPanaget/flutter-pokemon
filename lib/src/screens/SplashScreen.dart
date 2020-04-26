@@ -23,9 +23,8 @@ class SplashScreenState extends State<SplashScreen> {
     print("onStart");
     StorageService storage = StorageService();
     PokemonService pokemonService = PokemonService();
-    //await storage.initDatabase();
-    //get favorites ids list from storage
-    List<int> ids = [2, 87, 340];
+    await storage.init();
+    List<int> ids = storage.retrieve();
     Provider.of<FavoritesModel>(context, listen: false).init(ids);
     await pokemonService.fetchPokemonsList(ids);
     print("done caching");
@@ -36,7 +35,7 @@ class SplashScreenState extends State<SplashScreen> {
 //      } else {
 //        Navigator.pushReplacementNamed(context, '/login');
 //      }
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.pushReplacementNamed(context, '/home');
     });
   }
 

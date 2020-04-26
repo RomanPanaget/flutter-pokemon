@@ -13,12 +13,6 @@ class FavoritesModel extends ChangeNotifier{
     );
   }
 
-  toJson() {
-    Map<String, List<int>> json = Map<String, List<int>>();
-    json['ids'] = this.ids;
-    return json;
-  }
-
   bool isFavorite(int id) => this.ids.contains(id);
 
   init(List<int> ids) {
@@ -29,10 +23,12 @@ class FavoritesModel extends ChangeNotifier{
   add(int id) {
     this.ids.add(id);
     notifyListeners();
+    _storage.save(this.ids);
   }
 
   remove(int id) {
     this.ids.remove(id);
     notifyListeners();
+    _storage.save(this.ids);
   }
 }

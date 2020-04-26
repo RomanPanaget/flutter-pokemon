@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterpokemon/src/components/PokemonListTile.dart';
+import 'package:flutterpokemon/src/components/PokemonListCard.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/services/PokemonService.dart';
 
@@ -70,7 +70,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
           _pokemon != null
-              ? PokemonListTile(pokemon: _pokemon)
+              ? PokemonListCard(pokemon: _pokemon)
               : Expanded(
                   child: Center(
                       child: Text(_currentSearch.isEmpty

@@ -42,6 +42,13 @@ class HomeScreenState extends State<HomeScreen> {
                 Navigator.pushNamed(context, "/pokedex");
               },
             ),
+            ListTile(
+              leading: Icon(Icons.favorite),
+              title: Text("Favorites"),
+              onTap: () {
+                Navigator.pushNamed(context, "/favorites");
+              },
+            ),
             Expanded(
               flex: 1,
               child: Align(

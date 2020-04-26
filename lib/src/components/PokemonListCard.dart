@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class PokemonListCard extends StatefulWidget {
   final PokemonModel pokemon;
 
-  PokemonListCard({this.pokemon});
+  PokemonListCard({Key key, @required this.pokemon}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PokemonListCardState();
@@ -15,17 +17,32 @@ class PokemonListCard extends StatefulWidget {
 class _PokemonListCardState extends State<PokemonListCard>
     with SingleTickerProviderStateMixin {
   bool _fav;
+  bool _favTapped;
   AnimationController _controller;
   Animation<double> _opacity;
 
   @override
   void initState() {
     super.initState();
-    _fav = false;
+    _favTapped = false;
+    _fav = Provider.of<FavoritesModel>(context, listen: false)
+        .isFavorite(widget.pokemon.id);
     _controller =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
     _opacity = Tween(begin: 1.0, end: 0.0).animate(
         CurvedAnimation(parent: _controller, curve: Interval(0.5, 1.0)));
+  }
+
+  _toggleFav() {
+    _fav = !_fav;
+    _favTapped = true;
+    if (_fav)
+      Provider.of<FavoritesModel>(context, listen: false)
+          .add(widget.pokemon.id);
+    else
+      Provider.of<FavoritesModel>(context, listen: false)
+          .remove(widget.pokemon.id);
+    _controller.forward(from: 0);
   }
 
   @override
@@ -34,7 +51,7 @@ class _PokemonListCardState extends State<PokemonListCard>
     return GestureDetector(
         onDoubleTap: () {
           setState(() {
-            _fav = !_fav;
+            _toggleFav();
           });
         },
         child: Card(
@@ -73,12 +90,11 @@ class _PokemonListCardState extends State<PokemonListCard>
                             animation: _controller,
                             builder: (BuildContext context, Widget child) =>
                                 Opacity(
-                                    opacity: _opacity.value,
+                                    opacity:
+                                        _favTapped && _fav ? _opacity.value : 0,
                                     child: Center(
                                         child: Icon(
-                                      _fav
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
+                                      Icons.favorite,
                                       color: Colors.white,
                                       size: 100,
                                     ))))
@@ -108,7 +124,7 @@ class _PokemonListCardState extends State<PokemonListCard>
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _fav = !_fav;
+                                  _toggleFav();
                                 });
                               },
                             )

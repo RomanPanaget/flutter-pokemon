@@ -37,4 +37,13 @@ class PokemonService {
     var ids = new List<int>.generate(count, (i) => i);
     return Future.wait(ids.map((id) => fetchPokemon(first + id)));
   }
+
+  Future<List<PokemonModel>> fetchPokemonsList(List<int> ids) async {
+    return Future.wait(ids.map((id) => fetchPokemon(id)));
+  }
+
+  PokemonModel getFromCache(int id) {
+    if (pokemons.containsKey(id)) return pokemons[id];
+    throw Exception("Pokemon not found in cache");
+  }
 }

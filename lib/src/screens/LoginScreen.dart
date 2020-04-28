@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
+
   @override
   State<StatefulWidget> createState() => LoginScreenState();
 }
@@ -15,12 +16,15 @@ class LoginScreenState extends State<LoginScreen> {
         title: Text("Login"),
       ),
       body: Center(
-        child: RaisedButton(
-          child: Text("Login"),
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, "/home");
-          },
-        ),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Text("This is a login screen"),
+          RaisedButton(
+            child: Text("Login"),
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, "/home");
+            },
+          )
+        ]),
       ),
     );
   }

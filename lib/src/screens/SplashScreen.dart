@@ -27,9 +27,8 @@ class SplashScreenState extends State<SplashScreen> {
     List<int> ids = storage.retrieve();
     Provider.of<FavoritesModel>(context, listen: false).init(ids);
     await pokemonService.fetchPokemonsList(ids);
-    print("done caching");
     Future.delayed(Duration(seconds: 1), () {
-      // TODO: implement login check
+      // TODO: implement login
 //      if (false) {
 //        Navigator.pushReplacementNamed(context, '/home');
 //      } else {
@@ -43,7 +42,7 @@ class SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
-      body: Center(child: Text("Splash")),
+      body: Center(child: Image(image: AssetImage("assets/pokeball.png"), width: 200,)),
     );
   }
 }

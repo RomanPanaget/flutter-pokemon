@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpokemon/src/components/PokemonListCard.dart';
+import 'package:flutterpokemon/src/components/PokemonListTile.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/services/PokemonService.dart';
 
@@ -14,6 +15,7 @@ class PokedexScreen extends StatefulWidget {
 class _PokedexScreenState extends State<PokedexScreen> {
   final PokemonService _service = PokemonService();
   List<PokemonModel> _pokemons;
+  View _view;
 
   final _formKey = GlobalKey<FormState>();
   int firstId = 1;
@@ -22,6 +24,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
   @override
   void initState() {
     super.initState();
+    _view = View.card;
     _pokemons = [];
     fetchPokemons();
   }
@@ -48,7 +51,20 @@ class _PokedexScreenState extends State<PokedexScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Pokedex")),
+        appBar: AppBar(
+          title: Text("Pokedex"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                  _view == View.card ? Icons.view_headline : Icons.view_agenda),
+              onPressed: () {
+                setState(() {
+                  _view = _view == View.card ? View.list : View.card;
+                });
+              },
+            )
+          ],
+        ),
         body: Column(mainAxisSize: MainAxisSize.max, children: [
           Form(
               key: _formKey,
@@ -119,8 +135,9 @@ class _PokedexScreenState extends State<PokedexScreen> {
                   : _pokemons.length == 0
                       ? Center(child: Text("Empty"))
                       : ListView.builder(
-                          itemBuilder: (context, i) =>
-                              PokemonListCard(pokemon: this._pokemons[i]),
+                          itemBuilder: (context, i) => _view == View.card
+                              ? PokemonListCard(pokemon: this._pokemons[i])
+                              : PokemonListTile(pokemon: this._pokemons[i]),
                           itemCount: this._pokemons.length,
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -129,3 +146,5 @@ class _PokedexScreenState extends State<PokedexScreen> {
         ]));
   }
 }
+
+enum View { card, list }

@@ -36,12 +36,11 @@ class _PokemonListCardState extends State<PokemonListCard>
   _toggleFav() {
     _fav = !_fav;
     _favTapped = true;
+    var favorites = Provider.of<FavoritesModel>(context, listen: false);
     if (_fav)
-      Provider.of<FavoritesModel>(context, listen: false)
-          .add(widget.pokemon.id);
+      favorites.add(widget.pokemon.id);
     else
-      Provider.of<FavoritesModel>(context, listen: false)
-          .remove(widget.pokemon.id);
+      favorites.remove(widget.pokemon.id);
     _controller.forward(from: 0);
   }
 
@@ -49,6 +48,13 @@ class _PokemonListCardState extends State<PokemonListCard>
   Widget build(BuildContext context) {
     _controller.forward(from: 0);
     return GestureDetector(
+        onTap: () async {
+          var isFavNow = await Navigator.pushNamed(context, "/detail", arguments: widget.pokemon);
+          setState(() {
+            _fav = isFavNow;
+            _favTapped = false;
+          });
+        },
         onDoubleTap: () {
           setState(() {
             _toggleFav();

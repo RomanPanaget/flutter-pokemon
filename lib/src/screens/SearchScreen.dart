@@ -27,7 +27,8 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   _fetchPokemon() async {
-    PokemonModel pokemon = await this._service.fetchPokemon(_currentSearch);
+    PokemonModel pokemon =
+        await this._service.fetchPokemon(_currentSearch.toLowerCase());
     setState(() {
       _loading = false;
       _pokemon = pokemon;

@@ -15,20 +15,20 @@ class FavoritesModel extends ChangeNotifier{
 
   bool isFavorite(int id) => this.ids.contains(id);
 
-  init(List<int> ids) {
+  init() {
     _storage = StorageService();
-    this.ids = ids;
+    this.ids = _storage.retrieveIds();
   }
 
   add(int id) {
     this.ids.add(id);
     notifyListeners();
-    _storage.save(this.ids);
+    _storage.saveIds(this.ids);
   }
 
   remove(int id) {
     this.ids.remove(id);
     notifyListeners();
-    _storage.save(this.ids);
+    _storage.saveIds(this.ids);
   }
 }

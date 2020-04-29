@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
+import 'package:flutterpokemon/src/models/ThemeModel.dart';
 import 'package:flutterpokemon/src/services/PokemonService.dart';
 import 'package:flutterpokemon/src/services/StorageService.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +23,11 @@ class SplashScreenState extends State<SplashScreen> {
   onStart() async {
     print("onStart");
     StorageService storage = StorageService();
-    PokemonService pokemonService = PokemonService();
     await storage.init();
-    List<int> ids = storage.retrieve();
-    Provider.of<FavoritesModel>(context, listen: false).init(ids);
-    await pokemonService.fetchPokemonsList(ids);
+    PokemonService pokemonService = PokemonService();
+    Provider.of<FavoritesModel>(context, listen: false).init();
+    Provider.of<ThemeModel>(context, listen: false).init();
+    await pokemonService.fetchPokemonsList(storage.retrieveIds());
     Future.delayed(Duration(seconds: 1), () {
       // TODO: implement login
 //      if (false) {

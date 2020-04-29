@@ -6,11 +6,11 @@ class StorageService {
   static final StorageService _singleton = StorageService._internal();
 
   SharedPreferences prefs;
-  final String prefsString = "POKEMON:FAVORITES";
+  final String favoritesString = "POKEMON:FAVORITES";
+  final String darkModeString = "POKEMON:DARKMODE";
+  final String adaptiveModeString = "POKEMON:ADAPTIVEMODE";
 
-  StorageService._internal() {
-    //constructor
-  }
+  StorageService._internal();
 
   factory StorageService() {
     return _singleton;
@@ -18,13 +18,30 @@ class StorageService {
 
   init() async {
     prefs = await SharedPreferences.getInstance();
+    print(prefs);
   }
 
-  save(List<int> ids) {
-    prefs.setString(prefsString, jsonEncode(ids));
+  saveIds(List<int> ids) {
+    prefs.setString(favoritesString, jsonEncode(ids));
   }
 
-  List<int> retrieve() {
-    return jsonDecode(prefs.getString(prefsString) ?? "[]").cast<int>();
+  List<int> retrieveIds() {
+    return jsonDecode(prefs.getString(favoritesString) ?? "[]").cast<int>();
+  }
+
+  saveAdaptive(bool adaptive) {
+    prefs.setBool(adaptiveModeString, adaptive);
+  }
+
+  retrieveAdaptive() {
+    return prefs.getBool(adaptiveModeString);
+  }
+
+  saveDarkMode(bool darkMode) {
+    prefs.setBool(darkModeString, darkMode);
+  }
+
+  retrieveDarkMode() {
+    return prefs.getBool(darkModeString);
   }
 }

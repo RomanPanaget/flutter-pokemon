@@ -64,6 +64,16 @@ class HomeScreenState extends State<HomeScreen> {
                     Navigator.pushNamed(context, "/favorites");
                   },
                 ),
+                ListTile(
+                  leading: Icon(
+                    Icons.settings,
+                    color: Colors.red,
+                  ),
+                  title: Text("Settings", style: TextStyle(fontSize: 20)),
+                  onTap: () {
+                    Navigator.pushNamed(context, "/settings");
+                  },
+                ),
               ],
             )),
             Expanded(
@@ -91,7 +101,6 @@ class HomeScreenState extends State<HomeScreen> {
                   Image(image: AssetImage('assets/pokeball.png'), height: 120)),
           Text(
             'You can check the Github project of this app here',
-            style: new TextStyle(color: Colors.black),
           ),
           RaisedButton(
             child: Text("Github Project"),

@@ -36,11 +36,26 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
       favorites.remove(widget.pokemon.id);
   }
 
-  Widget _buildEvolutionTree(EvolutionChain evolution) {
+  Widget _buildEvolutionTree(EvolutionChain evolution, {bool first = false}) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        first
+            ? Column()
+            : Column(children: [
+                Icon(
+                  Icons.arrow_forward,
+                  size: 16,
+                ),
+                Text(
+                  evolution.evolutionDetails.length > 0 &&
+                          evolution.evolutionDetails[0].minLevel != null
+                      ? "lvl. ${evolution.evolutionDetails[0].minLevel}"
+                      : "",
+                  style: TextStyle(fontSize: 12),
+                )
+              ]),
         Column(children: [
           Image.network(
               "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolution.id}.png"),
@@ -97,8 +112,9 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             )),
           ]),
           Center(
-              child:
-                  _buildEvolutionTree(widget.pokemon.evolutions.evolutionChain))
+              child: _buildEvolutionTree(
+                  widget.pokemon.evolutions.evolutionChain,
+                  first: true))
         ]));
   }
 }

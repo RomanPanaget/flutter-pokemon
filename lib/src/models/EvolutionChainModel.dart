@@ -43,6 +43,6 @@ class EvolutionDetails {
   EvolutionDetails({this.minLevel});
 
   factory EvolutionDetails.fromJson(Map<String, dynamic> json) {
-    return EvolutionDetails(minLevel: json['minLevel']);
+    return EvolutionDetails(minLevel: json['min_level']);
   }
 }

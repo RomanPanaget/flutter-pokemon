@@ -49,7 +49,7 @@ class _DarkModeSetting extends State<DarkModeSetting> {
         onChanged: (v) => setState(() => _setAdaptive(v)),
       ),
       SwitchListTile(
-        title: Text("Dark mode"),
+        title: Text("Enable dark mode"),
         value: _isDarkMode,
         onChanged:
             _isAdaptive ? null : (v) => setState(() => _setDarkMode(v)),

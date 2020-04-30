@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,24 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
       favorites.remove(widget.pokemon.id);
   }
 
+  Widget _buildEvolutionTree(EvolutionChain evolution) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(children: [
+          Image.network(
+              "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolution.id}.png"),
+          Text(evolution.name.capitalize())
+        ]),
+        Column(
+            children: evolution.evolvesTo
+                .map((EvolutionChain ev) => _buildEvolutionTree(ev))
+                .toList())
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,25 +74,31 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
             )
           ],
         ),
-        body: Stack(children: [
-          Positioned(
-            top: 20,
-            left: 20,
-            child: Text(
-              "#1",
-              style: TextStyle(
-                  fontSize: 26, color: Colors.red, fontWeight: FontWeight.bold),
+        body: ListView(children: <Widget>[
+          Stack(children: [
+            Positioned(
+              top: 20,
+              left: 20,
+              child: Text(
+                "#${widget.pokemon.id}",
+                style: TextStyle(
+                    fontSize: 26,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          Column(children: <Widget>[
-            Padding(
+            Center(
+                child: Padding(
               padding: EdgeInsets.all(20),
               child: FadeInImage.assetNetwork(
                   placeholder: String.fromCharCodes(kTransparentImage),
                   image:
                       "https://pokeres.bastionbot.org/images/pokemon/${widget.pokemon.id}.png"),
-            ),
-          ])
+            )),
+          ]),
+          Center(
+              child:
+                  _buildEvolutionTree(widget.pokemon.evolutions.evolutionChain))
         ]));
   }
 }

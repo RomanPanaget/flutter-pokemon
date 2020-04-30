@@ -25,9 +25,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeModel>(builder: (context, theme, child) {
-      print(theme);
-      print(theme.adaptive);
-      print(theme.light);
       return MaterialApp(
         title: 'Flutter Pokemon App',
         theme: ThemeData(

@@ -1,13 +1,18 @@
+import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
+
 class PokemonModel {
-  int id;
-  String name;
+  final int id;
+  final String name;
+  final EvolutionChainModel evolutions;
 
-  PokemonModel({this.id, this.name});
+  PokemonModel({this.id, this.name, this.evolutions});
 
-  factory PokemonModel.fromJson(Map<String, dynamic> json) {
+  factory PokemonModel.fromJson(Map<String, dynamic> json,
+      {EvolutionChainModel evolutionChain}) {
     return PokemonModel(
       id: json['id'],
       name: json['name'],
+      evolutions: evolutionChain,
     );
   }
 }

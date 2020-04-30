@@ -49,16 +49,18 @@ class HomeScreenState extends State<HomeScreen> {
               ],
             )),
             Expanded(
-              flex: 1,
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: IconButton(
-                    icon: Icon(Icons.power_settings_new),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, "/login");
-                    },
-                  )),
-            ),
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: IconButton(
+                        icon: Icon(Icons.power_settings_new),
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, "/login");
+                        },
+                      )),
+                )),
           ],
         ),
       ),

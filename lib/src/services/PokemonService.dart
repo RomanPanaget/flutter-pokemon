@@ -1,34 +1,61 @@
 import 'dart:convert';
 
+import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:http/http.dart' as http;
 
 class PokemonService {
-  Map<dynamic, PokemonModel> pokemons;
+  Map<dynamic, PokemonModel> pokemonsCache;
+  Map<String, EvolutionChainModel> evolutionsCache;
   static final PokemonService _singleton = PokemonService._internal();
 
-  PokemonService._internal(){
-    pokemons = Map<dynamic, PokemonModel>();
+  PokemonService._internal() {
+    pokemonsCache = Map<dynamic, PokemonModel>();
+    evolutionsCache = Map<String, EvolutionChainModel>();
   }
 
   factory PokemonService() {
     return _singleton;
   }
 
-
   Future<PokemonModel> fetchPokemon(dynamic id) async {
-    if (pokemons.containsKey(id)) {
+    if (pokemonsCache.containsKey(id)) {
       print("Returned Pokemon in cache");
-      return pokemons[id];
+      return pokemonsCache[id];
     }
     print("Pokemon not found in cache, fetching API");
-    final response = await http.get('https://pokeapi.co/api/v2/pokemon/$id');
+    final pokemonResponse =
+        await http.get('https://pokeapi.co/api/v2/pokemon-species/$id');
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      PokemonModel pokemon = PokemonModel.fromJson(json);
-      pokemons[json['id']] = pokemon;
+    if (pokemonResponse.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(pokemonResponse.body);
+
+      EvolutionChainModel evolutions =
+          await fetchEvolutionChain(json['evolution_chain']['url']);
+
+      PokemonModel pokemon =
+          PokemonModel.fromJson(json, evolutionChain: evolutions);
+      pokemonsCache[json['id']] = pokemon;
+
       return pokemon;
+    }
+    return null;
+  }
+
+  Future<EvolutionChainModel> fetchEvolutionChain(String url) async {
+    if (evolutionsCache.containsKey(url)) {
+      print("Returned Evolution chain in cache");
+      return evolutionsCache[url];
+    }
+    print("Evolution chain not found in cache, fetching API");
+    final evolutionsResponse = await http.get(url);
+
+    if (evolutionsResponse.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(evolutionsResponse.body);
+      EvolutionChainModel evolutionChainModel =
+          EvolutionChainModel.fromJson(json);
+      evolutionsCache[url] = evolutionChainModel;
+      return evolutionChainModel;
     }
     return null;
   }
@@ -43,7 +70,7 @@ class PokemonService {
   }
 
   PokemonModel getFromCache(int id) {
-    if (pokemons.containsKey(id)) return pokemons[id];
+    if (pokemonsCache.containsKey(id)) return pokemonsCache[id];
     throw Exception("Pokemon not found in cache");
   }
 }

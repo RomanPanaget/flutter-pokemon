@@ -91,6 +91,14 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
         ),
         body: ListView(children: <Widget>[
           Stack(children: [
+            Center(
+                child: Padding(
+              padding: EdgeInsets.all(20),
+              child: FadeInImage.assetNetwork(
+                  placeholder: String.fromCharCodes(kTransparentImage),
+                  image:
+                      "https://pokeres.bastionbot.org/images/pokemon/${widget.pokemon.id}.png"),
+            )),
             Positioned(
               top: 20,
               left: 20,
@@ -102,15 +110,13 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            Center(
-                child: Padding(
-              padding: EdgeInsets.all(20),
-              child: FadeInImage.assetNetwork(
-                  placeholder: String.fromCharCodes(kTransparentImage),
-                  image:
-                      "https://pokeres.bastionbot.org/images/pokemon/${widget.pokemon.id}.png"),
-            )),
           ]),
+          Padding(
+              padding: EdgeInsets.only(left: 16),
+              child: Text(
+                "Evolution Chain",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              )),
           Center(
               child: _buildEvolutionTree(
                   widget.pokemon.evolutions.evolutionChain,

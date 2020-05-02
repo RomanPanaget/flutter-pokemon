@@ -48,9 +48,7 @@ class HomeScreenState extends State<HomeScreen> {
                     title: "Settings", icon: Icons.settings, path: "/settings"),
               ],
             )),
-            Expanded(
-                flex: 1,
-                child: Padding(
+            Padding(
                   padding: EdgeInsets.only(bottom: 20),
                   child: Align(
                       alignment: Alignment.bottomCenter,
@@ -60,7 +58,7 @@ class HomeScreenState extends State<HomeScreen> {
                           Navigator.pushReplacementNamed(context, "/login");
                         },
                       )),
-                )),
+                ),
           ],
         ),
       ),

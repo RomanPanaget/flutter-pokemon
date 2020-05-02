@@ -7,7 +7,7 @@ class InfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.only(top: 22),child: Row(
+    return Padding(padding: EdgeInsets.symmetric(vertical: 22),child: Row(
       children: <Widget>[
         Expanded(child: Divider(
           indent: 16,

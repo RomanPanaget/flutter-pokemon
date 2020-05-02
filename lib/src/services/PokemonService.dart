@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
+import 'package:flutterpokemon/src/models/TypeModel.dart';
 import 'package:http/http.dart' as http;
 
 class PokemonService {
@@ -33,8 +34,10 @@ class PokemonService {
       EvolutionChainModel evolutions =
           await fetchEvolutionChain(json['evolution_chain']['url']);
 
+      TypeModel types = await fetchTypes(id);
+
       PokemonModel pokemon =
-          PokemonModel.fromJson(json, evolutionChain: evolutions);
+          PokemonModel.fromJson(json, evolutionChain: evolutions, types: types);
       pokemonsCache[json['id']] = pokemon;
 
       return pokemon;
@@ -56,6 +59,18 @@ class PokemonService {
           EvolutionChainModel.fromJson(json);
       evolutionsCache[url] = evolutionChainModel;
       return evolutionChainModel;
+    }
+    return null;
+  }
+
+  Future<TypeModel> fetchTypes(dynamic id) async {
+    final pokemonResponse =
+        await http.get('https://pokeapi.co/api/v2/pokemon/$id');
+
+    if (pokemonResponse.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(pokemonResponse.body);
+
+      return TypeModel.fromJson(json);
     }
     return null;
   }

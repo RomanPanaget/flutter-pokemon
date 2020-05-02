@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpokemon/src/components/InfoSection.dart';
+import 'package:flutterpokemon/src/components/TypeTag.dart';
 import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
@@ -106,19 +107,24 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
               ),
             ),
           ]),
+          InfoSection(title: "Types"),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: widget.pokemon.types.names
+                .map((name) => Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 6),
+                    child: TypeTag(
+                      typeTitle: name,
+                    )))
+                .toList(),
+          ),
           InfoSection(title: "Evolution Chain"),
           Center(
               child: _buildEvolutionTree(
                   widget.pokemon.evolutions.evolutionChain,
                   first: true)),
-
           InfoSection(title: "Another section"),
         ]));
-  }
-}
-
-extension StringExtension on String {
-  String capitalize() {
-    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }

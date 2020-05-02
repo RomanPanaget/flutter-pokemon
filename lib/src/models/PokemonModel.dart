@@ -17,4 +17,5 @@ class PokemonModel {
         evolutions: evolutionChain,
         types: types);
   }
+
 }

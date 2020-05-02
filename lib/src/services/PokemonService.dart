@@ -80,7 +80,7 @@ class PokemonService {
     return Future.wait(ids.map((id) => fetchPokemon(first + id)));
   }
 
-  Future<List<PokemonModel>> fetchPokemonsList(List<int> ids) async {
+  Future<List<PokemonModel>> fetchPokemonsList(List<dynamic> ids) async {
     return Future.wait(ids.map((id) => fetchPokemon(id)));
   }
 

@@ -28,10 +28,13 @@ class PokemonListTile extends StatelessWidget {
       trailing: Row(mainAxisSize: MainAxisSize.min, children: [
         Image.network(
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.pokemon.id}.png"),
-        Padding(padding: EdgeInsets.only(left: 10),child:Icon(Icons.chevron_right))
+        Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Icon(Icons.chevron_right))
       ]),
       onTap: () {
-        Navigator.pushNamed(context, "/detail", arguments: this.pokemon);
+        Navigator.pushNamed(context, "/detail",
+            arguments: Future.value(this.pokemon));
       },
     );
   }

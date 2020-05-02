@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterpokemon/src/components/EvolutionChainTile.dart';
 import 'package:flutterpokemon/src/components/InfoSection.dart';
 import 'package:flutterpokemon/src/components/TypeTag.dart';
-import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +11,9 @@ import 'package:transparent_image/transparent_image.dart';
 class PokemonDetailScreen extends StatefulWidget {
   static const routeName = '/detail';
 
-  final PokemonModel pokemon;
+  final Future<PokemonModel> pokemonFuture;
 
-  PokemonDetailScreen(this.pokemon);
+  PokemonDetailScreen(this.pokemonFuture);
 
   @override
   State<StatefulWidget> createState() => _PokemonDetailScreenState();
@@ -21,110 +21,103 @@ class PokemonDetailScreen extends StatefulWidget {
 
 class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
   bool _fav;
+  PokemonModel _pokemon;
 
   @override
   void initState() {
     super.initState();
-    _fav = Provider.of<FavoritesModel>(context, listen: false)
-        .isFavorite(widget.pokemon.id);
+    onStart();
+  }
+
+  onStart() async {
+    var pokemon = await widget.pokemonFuture;
+    if (this.mounted) {
+      setState(() {
+        _fav = Provider.of<FavoritesModel>(context, listen: false)
+            .isFavorite(pokemon.id);
+        _pokemon = pokemon;
+      });
+    }
   }
 
   _toggleFav() {
     _fav = !_fav;
     var favorites = Provider.of<FavoritesModel>(context, listen: false);
     if (_fav)
-      favorites.add(widget.pokemon.id);
+      favorites.add(_pokemon.id);
     else
-      favorites.remove(widget.pokemon.id);
-  }
-
-  Widget _buildEvolutionTree(EvolutionChain evolution, {bool first = false}) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        first
-            ? Column()
-            : Column(children: [
-                Icon(
-                  Icons.arrow_forward,
-                  size: 16,
-                ),
-                ...evolution.buildDetails()
-              ]),
-        Column(children: [
-          Image.network(
-              "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolution.id}.png"),
-          Text(evolution.name.capitalize())
-        ]),
-        Column(
-            children: evolution.evolvesTo
-                .map((EvolutionChain ev) => _buildEvolutionTree(ev))
-                .toList())
-      ],
-    );
+      favorites.remove(_pokemon.id);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: BackButtonIcon(),
-            onPressed: () => Navigator.pop(context, _fav),
-          ),
-          title: Text(widget.pokemon.name.capitalize()),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(_fav ? Icons.favorite : Icons.favorite_border),
-              onPressed: () {
-                setState(() {
-                  _toggleFav();
-                });
-              },
-            )
-          ],
+          title:
+              Text(_pokemon != null ? _pokemon.name.capitalize() : "Loading"),
+          actions: _pokemon != null
+              ? <Widget>[
+                  IconButton(
+                    icon: Icon(_fav ? Icons.favorite : Icons.favorite_border),
+                    onPressed: () {
+                      setState(() {
+                        _toggleFav();
+                      });
+                    },
+                  )
+                ]
+              : [],
         ),
-        body: ListView(children: <Widget>[
-          Stack(children: [
-            Center(
-                child: Padding(
-              padding: EdgeInsets.all(20),
-              child: FadeInImage.assetNetwork(
-                  placeholder: String.fromCharCodes(kTransparentImage),
-                  image:
-                      "https://pokeres.bastionbot.org/images/pokemon/${widget.pokemon.id}.png"),
-            )),
-            Positioned(
-              top: 20,
-              left: 20,
-              child: Text(
-                "#${widget.pokemon.id}",
-                style: TextStyle(
-                    fontSize: 26,
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ]),
-          InfoSection(title: "Types"),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: widget.pokemon.types.names
-                .map((name) => Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 6),
-                    child: TypeTag(
-                      typeTitle: name,
-                    )))
-                .toList(),
-          ),
-          InfoSection(title: "Evolution Chain"),
-          Center(
-              child: _buildEvolutionTree(
-                  widget.pokemon.evolutions.evolutionChain,
-                  first: true)),
-          InfoSection(title: "Another section"),
-        ]));
+        body: _pokemon == null
+            ? Center(child: CircularProgressIndicator())
+            : ListView(children: <Widget>[
+                Container(
+                    height: 270,
+                    child: Stack(children: [
+                      Center(
+                          child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: FadeInImage.assetNetwork(
+                            placeholder:
+                                String.fromCharCodes(kTransparentImage),
+                            image:
+                                "https://pokeres.bastionbot.org/images/pokemon/${_pokemon.id}.png"),
+                      )),
+                      Positioned(
+                        top: 20,
+                        left: 20,
+                        child: Text(
+                          "#${_pokemon.id}",
+                          style: TextStyle(
+                              fontSize: 26,
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ])),
+                InfoSection(title: "Types"),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: _pokemon.types.names
+                      .map((name) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 6),
+                          child: TypeTag(
+                            typeTitle: name,
+                          )))
+                      .toList(),
+                ),
+                InfoSection(title: "Evolution Chain"),
+                EvolutionChainTile(
+                    pokemonName: _pokemon.name,
+                    evolutionChain: _pokemon.evolutions.evolutionChain),
+                InfoSection(title: "Another section"),
+              ]));
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }

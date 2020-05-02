@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             case FavoritesScreen.routeName:
               return MaterialPageRoute(builder: (_) => FavoritesScreen());
             case PokemonDetailScreen.routeName:
-              final PokemonModel pokemon = settings.arguments;
+              final Future<PokemonModel> pokemon = settings.arguments;
               return MaterialPageRoute(
                   builder: (_) => PokemonDetailScreen(pokemon));
             case SettingsScreen.routeName:

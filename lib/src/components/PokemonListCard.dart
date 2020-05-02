@@ -48,12 +48,9 @@ class _PokemonListCardState extends State<PokemonListCard>
   Widget build(BuildContext context) {
     _controller.forward(from: 0);
     return GestureDetector(
-        onTap: () async {
-          var isFavNow = await Navigator.pushNamed(context, "/detail", arguments: widget.pokemon);
-          setState(() {
-            _fav = isFavNow;
-            _favTapped = false;
-          });
+        onTap: () {
+          Navigator.pushNamed(context, "/detail",
+              arguments: Future.value(widget.pokemon));
         },
         onDoubleTap: () {
           setState(() {

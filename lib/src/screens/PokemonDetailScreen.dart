@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterpokemon/src/components/InfoSection.dart';
 import 'package:flutterpokemon/src/models/EvolutionChainModel.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
@@ -48,13 +49,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                   Icons.arrow_forward,
                   size: 16,
                 ),
-                Text(
-                  evolution.evolutionDetails.length > 0 &&
-                          evolution.evolutionDetails[0].minLevel != null
-                      ? "lvl. ${evolution.evolutionDetails[0].minLevel}"
-                      : "",
-                  style: TextStyle(fontSize: 12),
-                )
+                ...evolution.buildDetails()
               ]),
         Column(children: [
           Image.network(
@@ -111,16 +106,13 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
               ),
             ),
           ]),
-          Padding(
-              padding: EdgeInsets.only(left: 16),
-              child: Text(
-                "Evolution Chain",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              )),
+          InfoSection(title: "Evolution Chain"),
           Center(
               child: _buildEvolutionTree(
                   widget.pokemon.evolutions.evolutionChain,
-                  first: true))
+                  first: true)),
+
+          InfoSection(title: "Another section"),
         ]));
   }
 }

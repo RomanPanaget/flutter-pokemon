@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class EvolutionChainModel {
   final int id;
   final String url;
@@ -35,14 +37,58 @@ class EvolutionChain {
           return EvolutionChain.fromJson(evolutionChainJson);
         }).toList());
   }
+
+  List<Widget> buildDetails() {
+    return <Widget>[
+      ...(evolutionDetails.length > 0
+          ? evolutionDetails[0].buildDetails()
+          : []),
+      ...evolutionDetails.sublist(1).expand((evDet) =>
+          [Text("or", style: TextStyle(fontSize: 10)), ...evDet.buildDetails()])
+    ];
+  }
 }
 
 class EvolutionDetails {
+  final String trigger;
   final int minLevel;
+  final String gender;
+  final String item;
+  final int relativePhysicalStats;
 
-  EvolutionDetails({this.minLevel});
+  EvolutionDetails(
+      {this.trigger,
+      this.item,
+      this.minLevel,
+      this.gender,
+      this.relativePhysicalStats});
 
   factory EvolutionDetails.fromJson(Map<String, dynamic> json) {
-    return EvolutionDetails(minLevel: json['min_level']);
+    return EvolutionDetails(
+        trigger: json['trigger']['name'],
+        item: json['item'] != null ? json['item']['name'] : null,
+        minLevel: json['min_level'],
+        gender: json['gender'],
+        relativePhysicalStats: json['relative_physical_stats']);
+  }
+
+  List<Widget> buildDetails() {
+    TextStyle style = TextStyle(fontSize: 10);
+    return [
+      trigger == "level-up" && minLevel != null
+          ? Text("lvl $minLevel", style: style)
+          : null,
+      trigger == "use-item"
+          ? Image.network(
+              "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/$item.png")
+          : null,
+      relativePhysicalStats != null
+          ? relativePhysicalStats > 0
+              ? Text("Att > Def", style: style)
+              : relativePhysicalStats == 0
+                  ? Text("Att = Def", style: style)
+                  : Text("Att < Def", style: style)
+          : null
+    ]..removeWhere((el) => el == null);
   }
 }

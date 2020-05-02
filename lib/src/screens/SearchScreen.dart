@@ -63,6 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 onPressed: _onSubmit,
               ),
               title: TextFormField(
+                autofocus: true,
                 initialValue: _currentSearch,
                 expands: false,
                 decoration: InputDecoration(

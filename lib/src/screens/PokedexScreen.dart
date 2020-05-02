@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpokemon/src/components/PokemonListCard.dart';
 import 'package:flutterpokemon/src/components/PokemonListTile.dart';
+import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/services/PokemonService.dart';
+import 'package:provider/provider.dart';
 
 class PokedexScreen extends StatefulWidget {
   static const routeName = '/pokedex';
@@ -133,16 +135,27 @@ class _PokedexScreenState extends State<PokedexScreen> {
               child: _pokemons == null
                   ? Center(child: CircularProgressIndicator())
                   : _pokemons.length == 0
-                      ? Center(child: Text("Empty"))
-                      : ListView.builder(
-                          itemBuilder: (context, i) => _view == View.card
-                              ? PokemonListCard(pokemon: this._pokemons[i])
-                              : PokemonListTile(pokemon: this._pokemons[i]),
-                          itemCount: this._pokemons.length,
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          physics: ScrollPhysics(),
-                        ))
+                  ? Center(child: Text("Empty"))
+                  : Consumer<FavoritesModel>(
+                  builder: (context, favorites, child) =>
+                      ListView.builder(
+                        itemBuilder: (context, i) =>
+                        _view == View.card
+                            ? PokemonListCard(
+                          pokemon: this._pokemons[i],
+                          isFav: favorites.isFavorite(this._pokemons[i].id),
+                          onFavPressed: () {
+                            Provider.of<FavoritesModel>(context, listen: false)
+                                .toggle(this._pokemons[i].id);
+                          },
+                        )
+                            : PokemonListTile(
+                            pokemon: this._pokemons[i]),
+                        itemCount: this._pokemons.length,
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                      )))
         ]));
   }
 }

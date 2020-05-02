@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutterpokemon/src/services/StorageService.dart';
 
-class FavoritesModel extends ChangeNotifier{
+class FavoritesModel extends ChangeNotifier {
   List<int> ids;
   StorageService _storage;
 
@@ -30,5 +30,13 @@ class FavoritesModel extends ChangeNotifier{
     this.ids.remove(id);
     notifyListeners();
     _storage.saveIds(this.ids);
+  }
+
+  toggle(int id) {
+    if (this.ids.contains(id)) {
+      remove(id);
+    } else {
+      add(id);
+    }
   }
 }

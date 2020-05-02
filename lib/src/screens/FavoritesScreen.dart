@@ -22,8 +22,13 @@ class FavoritesScreen extends StatelessWidget {
                 ? Center(child: Text("No favorites found..."))
                 : ListView.builder(
                     itemBuilder: (context, index) => PokemonListCard(
-                        key: ValueKey(favorites.ids[index]),
-                        pokemon: _service.getFromCache(favorites.ids[index])),
+                      key: ValueKey(favorites.ids[index]),
+                      pokemon: _service.getFromCache(favorites.ids[index]),
+                      isFav: true,
+                      onFavPressed: () =>
+                          Provider.of<FavoritesModel>(context, listen: false)
+                              .remove(favorites.ids[index]),
+                    ),
                     itemCount: favorites.ids.length,
                   );
           },

@@ -27,7 +27,6 @@ class _PokedexScreenState extends State<PokedexScreen> {
   void initState() {
     super.initState();
     _view = View.card;
-    _pokemons = [];
     fetchPokemons();
   }
 

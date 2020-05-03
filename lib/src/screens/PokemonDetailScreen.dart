@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpokemon/src/components/InfoSection.dart';
 import 'package:flutterpokemon/src/components/details/EvolutionChainTile.dart';
+import 'package:flutterpokemon/src/components/details/TypeRelationsTile.dart';
+import 'package:flutterpokemon/src/components/details/TypesRelationsGivenTile.dart';
 import 'package:flutterpokemon/src/components/details/TypesRelationsTakenTile.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
@@ -100,11 +102,28 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                 EvolutionChainTile(
                     pokemonName: _pokemon.name,
                     evolutionChain: _pokemon.evolutions.evolutionChain),
-                InfoSection(title: "Type Damage Taken"),
-                TypesRelationsTakenTile(
-                    types: _pokemon.types,
-                    combination: TypesModel.combineTypes(_pokemon.types)),
-                InfoSection(title: "Another section"),
+                ...(_pokemon.types.length == 1
+                    ? [
+                        InfoSection(title: "Type Damage Relations"),
+                        TypesRelationsTile(type: _pokemon.types[0])
+                      ]
+                    : [
+                        InfoSection(title: "Type Damage Taken"),
+                        TypesRelationsTakenTile(
+                            types: _pokemon.types,
+                            combination:
+                                TypesModel.combineTypes(_pokemon.types)),
+                        ..._pokemon.types
+                            .expand((TypeModel type) => [
+                                  InfoSection(
+                                      title:
+                                          "Type Damage Given - ${type.name.capitalize()}"),
+                                  TypesRelationsGivenTile(
+                                    type: type,
+                                  )
+                                ])
+                            .toList()
+                      ])
               ]));
   }
 }

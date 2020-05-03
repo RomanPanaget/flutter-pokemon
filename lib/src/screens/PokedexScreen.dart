@@ -68,94 +68,96 @@ class _PokedexScreenState extends State<PokedexScreen> {
           ],
         ),
         body: Column(mainAxisSize: MainAxisSize.max, children: [
-          Form(
-              key: _formKey,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: Text("From")),
-                  Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            maxLength: 4,
-                            initialValue: '$firstId',
-                            onFieldSubmitted: (v) => _onSubmit(),
-                            validator: (value) {
-                              if (value.isEmpty ||
-                                  (int.tryParse(value) ?? "") is! int) {
-                                print(value.isEmpty);
-                                print(value is int);
-                                return 'Enter a number';
-                              }
-                              return null;
-                            },
-                            onSaved: (v) {
-                              firstId = int.tryParse(v) ?? 0;
-                            },
-                          ))),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: Text("Count")),
-                  Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 20),
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            maxLength: 4,
-                            initialValue: '$count',
-                            validator: (value) {
-                              if (value.isEmpty ||
-                                  (int.tryParse(value) ?? "") is! int) {
-                                return 'Enter a number';
-                              }
-                              return null;
-                            },
-                            onFieldSubmitted: (v) => _onSubmit(),
-                            onSaved: (v) {
-                              count = int.tryParse(v) ?? 0;
-                            },
-                          ))),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24),
-                      child: RaisedButton(
-                        child: Text(
-                          "Fetch",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: Colors.red,
-                        onPressed: _onSubmit,
-                      )),
-                ],
-              )),
+          Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: Form(
+                  key: _formKey,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: Text("From")),
+                      Expanded(
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                maxLength: 4,
+                                initialValue: '$firstId',
+                                onFieldSubmitted: (v) => _onSubmit(),
+                                validator: (value) {
+                                  if (value.isEmpty ||
+                                      (int.tryParse(value) ?? "") is! int) {
+                                    print(value.isEmpty);
+                                    print(value is int);
+                                    return 'Enter a number';
+                                  }
+                                  return null;
+                                },
+                                onSaved: (v) {
+                                  firstId = int.tryParse(v) ?? 0;
+                                },
+                              ))),
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: Text("Count")),
+                      Expanded(
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                maxLength: 4,
+                                initialValue: '$count',
+                                validator: (value) {
+                                  if (value.isEmpty ||
+                                      (int.tryParse(value) ?? "") is! int) {
+                                    return 'Enter a number';
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (v) => _onSubmit(),
+                                onSaved: (v) {
+                                  count = int.tryParse(v) ?? 0;
+                                },
+                              ))),
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: RaisedButton(
+                            child: Text(
+                              "Fetch",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.red,
+                            onPressed: _onSubmit,
+                          )),
+                    ],
+                  ))),
           Expanded(
               child: _pokemons == null
                   ? Center(child: CircularProgressIndicator())
                   : _pokemons.length == 0
-                  ? Center(child: Text("Empty"))
-                  : Consumer<FavoritesModel>(
-                  builder: (context, favorites, child) =>
-                      ListView.builder(
-                        itemBuilder: (context, i) =>
-                        _view == View.card
-                            ? PokemonListCard(
-                          pokemon: this._pokemons[i],
-                          isFav: favorites.isFavorite(this._pokemons[i].id),
-                          onFavPressed: () {
-                            Provider.of<FavoritesModel>(context, listen: false)
-                                .toggle(this._pokemons[i].id);
-                          },
-                        )
-                            : PokemonListTile(
-                            pokemon: this._pokemons[i]),
-                        itemCount: this._pokemons.length,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                      )))
+                      ? Center(child: Text("Empty"))
+                      : Consumer<FavoritesModel>(
+                          builder: (context, favorites, child) =>
+                              ListView.builder(
+                                itemBuilder: (context, i) => _view == View.card
+                                    ? PokemonListCard(
+                                        pokemon: this._pokemons[i],
+                                        isFav: favorites
+                                            .isFavorite(this._pokemons[i].id),
+                                        onFavPressed: () {
+                                          favorites
+                                              .toggle(this._pokemons[i].id);
+                                        },
+                                      )
+                                    : PokemonListTile(
+                                        pokemon: this._pokemons[i]),
+                                itemCount: this._pokemons.length,
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                              )))
         ]));
   }
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterpokemon/src/components/PokemonListCard.dart';
+import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/services/PokemonService.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   static const routeName = '/search';
@@ -90,7 +92,14 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: Text(_currentSearch.isEmpty
                               ? "Try searching for something"
                               : "We couldn't find any pokemon with \"$_currentSearch\"")))
-                  : PokemonListCard(pokemon: _pokemon)
+                  : Consumer<FavoritesModel>(
+                      builder: (context, favorites, child) {
+                      return PokemonListCard(
+                        pokemon: _pokemon,
+                        isFav: favorites.isFavorite(_pokemon.id),
+                        onFavPressed: () => favorites.toggle(_pokemon.id),
+                      );
+                    })
         ],
       ),
     );

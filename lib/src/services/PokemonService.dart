@@ -8,11 +8,13 @@ import 'package:http/http.dart' as http;
 class PokemonService {
   Map<dynamic, PokemonModel> pokemonsCache;
   Map<String, EvolutionChainModel> evolutionsCache;
+  Map<String, TypeModel> typesCache;
   static final PokemonService _singleton = PokemonService._internal();
 
   PokemonService._internal() {
     pokemonsCache = Map<dynamic, PokemonModel>();
     evolutionsCache = Map<String, EvolutionChainModel>();
+    typesCache = Map<String, TypeModel>();
   }
 
   factory PokemonService() {
@@ -34,7 +36,7 @@ class PokemonService {
       EvolutionChainModel evolutions =
           await fetchEvolutionChain(json['evolution_chain']['url']);
 
-      TypeModel types = await fetchTypes(id);
+      List<TypeModel> types = await fetchTypes(id);
 
       PokemonModel pokemon =
           PokemonModel.fromJson(json, evolutionChain: evolutions, types: types);
@@ -63,14 +65,37 @@ class PokemonService {
     return null;
   }
 
-  Future<TypeModel> fetchTypes(dynamic id) async {
+  Future<List<TypeModel>> fetchTypes(dynamic id) async {
     final pokemonResponse =
         await http.get('https://pokeapi.co/api/v2/pokemon/$id');
 
     if (pokemonResponse.statusCode == 200) {
       Map<String, dynamic> json = jsonDecode(pokemonResponse.body);
+      List<String> names = (json['types'] as List)
+          .map((type) => type['type']['name'])
+          .cast<String>()
+          .toList();
 
-      return TypeModel.fromJson(json);
+      return Future.wait(names.map((name) => fetchType(name)));
+    }
+    return null;
+  }
+
+  Future<TypeModel> fetchType(String name) async {
+    if (typesCache.containsKey(name)) {
+      print("Returned Type in cache");
+      return typesCache[name];
+    }
+    print("Type not found in cache, fetching API");
+
+    final typeResponse = await http.get('https://pokeapi.co/api/v2/type/$name');
+
+    if (typeResponse.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(typeResponse.body);
+
+      TypeModel typeModel = TypeModel.fromJson(json);
+      typesCache[name] = typeModel;
+      return typeModel;
     }
     return null;
   }

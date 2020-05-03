@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterpokemon/src/components/EvolutionChainTile.dart';
 import 'package:flutterpokemon/src/components/InfoSection.dart';
-import 'package:flutterpokemon/src/components/TypeTag.dart';
+import 'package:flutterpokemon/src/components/details/EvolutionChainTile.dart';
+import 'package:flutterpokemon/src/components/details/TypesRelationsTakenTile.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
+import 'package:flutterpokemon/src/models/TypeModel.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -95,22 +96,14 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                         ),
                       ),
                     ])),
-                InfoSection(title: "Types"),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _pokemon.types.names
-                      .map((name) => Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 6),
-                          child: TypeTag(
-                            typeTitle: name,
-                          )))
-                      .toList(),
-                ),
                 InfoSection(title: "Evolution Chain"),
                 EvolutionChainTile(
                     pokemonName: _pokemon.name,
                     evolutionChain: _pokemon.evolutions.evolutionChain),
+                InfoSection(title: "Type Damage Taken"),
+                TypesRelationsTakenTile(
+                    types: _pokemon.types,
+                    combination: TypesModel.combineTypes(_pokemon.types)),
                 InfoSection(title: "Another section"),
               ]));
   }

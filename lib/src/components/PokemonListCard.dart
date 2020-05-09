@@ -43,7 +43,6 @@ class _PokemonListCardState extends State<PokemonListCard>
 
   @override
   Widget build(BuildContext context) {
-    _controller.forward(from: 0);
     return GestureDetector(
         onTap: () {
           Navigator.pushNamed(context, "/detail",

@@ -16,6 +16,9 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        brightness: Theme.of(context).brightness,
       ),
       drawer: Drawer(
         child: Column(
@@ -49,16 +52,16 @@ class HomeScreenState extends State<HomeScreen> {
               ],
             )),
             Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: IconButton(
-                        icon: Icon(Icons.power_settings_new),
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(context, "/login");
-                        },
-                      )),
-                ),
+              padding: EdgeInsets.only(bottom: 20),
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: IconButton(
+                    icon: Icon(Icons.power_settings_new),
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, "/login");
+                    },
+                  )),
+            ),
           ],
         ),
       ),
@@ -75,7 +78,13 @@ class HomeScreenState extends State<HomeScreen> {
             'You can check the Github project of this app here',
           ),
           RaisedButton(
-            child: Text("Github Project"),
+            child: Text(
+              "Github Project",
+              style: TextStyle(color: Colors.white),
+            ),
+            color: Theme.of(context).accentColor.withOpacity(0.8),
+            elevation: 0,
+            highlightElevation: 0,
             onPressed: () async {
               const String url =
                   "https://github.com/RomanPanaget/flutter-pokemon";

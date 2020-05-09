@@ -54,6 +54,9 @@ class _PokedexScreenState extends State<PokedexScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Pokedex"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          brightness: Theme.of(context).brightness,
           actions: <Widget>[
             IconButton(
               icon: Icon(
@@ -67,71 +70,83 @@ class _PokedexScreenState extends State<PokedexScreen> {
           ],
         ),
         body: Column(mainAxisSize: MainAxisSize.max, children: [
-          Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: Form(
-                  key: _formKey,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          child: Text("From")),
-                      Expanded(
-                          child: Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                maxLength: 4,
-                                initialValue: '$firstId',
-                                onFieldSubmitted: (v) => _onSubmit(),
-                                validator: (value) {
-                                  if (value.isEmpty ||
-                                      (int.tryParse(value) ?? "") is! int) {
-                                    print(value.isEmpty);
-                                    print(value is int);
-                                    return 'Enter a number';
-                                  }
-                                  return null;
-                                },
-                                onSaved: (v) {
-                                  firstId = int.tryParse(v) ?? 0;
-                                },
-                              ))),
-                      Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          child: Text("Count")),
-                      Expanded(
-                          child: Padding(
-                              padding: EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                maxLength: 4,
-                                initialValue: '$count',
-                                validator: (value) {
-                                  if (value.isEmpty ||
-                                      (int.tryParse(value) ?? "") is! int) {
-                                    return 'Enter a number';
-                                  }
-                                  return null;
-                                },
-                                onFieldSubmitted: (v) => _onSubmit(),
-                                onSaved: (v) {
-                                  count = int.tryParse(v) ?? 0;
-                                },
-                              ))),
-                      Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24),
-                          child: RaisedButton(
-                            child: Text(
-                              "Fetch",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            color: Colors.red,
-                            onPressed: _onSubmit,
-                          )),
-                    ],
-                  ))),
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).backgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                      offset: Offset(0, 21),
+                      blurRadius: 53,
+                      color: Colors.black.withOpacity(0.05))
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: Form(
+                      key: _formKey,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24),
+                              child: Text("From")),
+                          Expanded(
+                              child: Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 4,
+                                    initialValue: '$firstId',
+                                    onFieldSubmitted: (v) => _onSubmit(),
+                                    validator: (value) {
+                                      if (value.isEmpty ||
+                                          (int.tryParse(value) ?? "") is! int) {
+                                        print(value.isEmpty);
+                                        print(value is int);
+                                        return 'Enter a number';
+                                      }
+                                      return null;
+                                    },
+                                    onSaved: (v) {
+                                      firstId = int.tryParse(v) ?? 0;
+                                    },
+                                  ))),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24),
+                              child: Text("Count")),
+                          Expanded(
+                              child: Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 4,
+                                    initialValue: '$count',
+                                    validator: (value) {
+                                      if (value.isEmpty ||
+                                          (int.tryParse(value) ?? "") is! int) {
+                                        return 'Enter a number';
+                                      }
+                                      return null;
+                                    },
+                                    onFieldSubmitted: (v) => _onSubmit(),
+                                    onSaved: (v) {
+                                      count = int.tryParse(v) ?? 0;
+                                    },
+                                  ))),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24),
+                              child: RaisedButton(
+                                child: Text(
+                                  "Fetch",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.red,
+                                onPressed: _onSubmit,
+                              )),
+                        ],
+                      )))),
           Expanded(
               child: _pokemons == null
                   ? Center(child: CircularProgressIndicator())

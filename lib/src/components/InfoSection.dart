@@ -2,25 +2,29 @@ import 'package:flutter/material.dart';
 
 class InfoSection extends StatelessWidget {
   final String title;
+  final Widget child;
 
-  InfoSection({this.title});
+  InfoSection({this.title, this.child});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: EdgeInsets.symmetric(vertical: 22),child: Row(
-      children: <Widget>[
-        Expanded(child: Divider(
-          indent: 16,
-          endIndent: 16,
-          thickness: 1,
-        )),
-        Text(this.title),
-        Expanded(child: Divider(
-          indent: 16,
-          endIndent: 16,
-          thickness: 1,
-        )),
-      ],
-    ));
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 22),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).backgroundColor),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(left: 16, bottom: 16),
+                child: Text(
+                  this.title,
+                  style: TextStyle(fontSize: 16),
+                )),
+            this.child
+          ],
+        ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterpokemon/src/models/FavoritesModel.dart';
 import 'package:flutterpokemon/src/models/PokemonModel.dart';
 import 'package:flutterpokemon/src/models/ThemeModel.dart';
@@ -24,17 +25,26 @@ void main() => runApp(MultiProvider(
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.white));
     return Consumer<ThemeModel>(builder: (context, theme, child) {
       return MaterialApp(
         title: 'Flutter Pokemon App',
         theme: ThemeData(
-          brightness: Brightness.light,
-          primaryColor: Colors.red,
-        ),
+            brightness: Brightness.light,
+            primaryColor: Colors.white,
+            accentColor: Colors.red,
+            primaryTextTheme: TextTheme(title: TextStyle(color: Colors.red)),
+            primaryIconTheme:
+                Theme.of(context).primaryIconTheme.copyWith(color: Colors.red),
+            backgroundColor: Colors.white),
         darkTheme: ThemeData(
           brightness: Brightness.dark,
-          primaryColor: Colors.red,
-          accentColor: Colors.white,
+          primaryColor: Colors.white,
+          accentColor: Colors.red,
+          primaryTextTheme: TextTheme(title: TextStyle(color: Colors.red)),
+          primaryIconTheme:
+              Theme.of(context).primaryIconTheme.copyWith(color: Colors.red),
         ),
         themeMode: theme.adaptive
             ? ThemeMode.system

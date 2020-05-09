@@ -14,6 +14,9 @@ class _SettingsScreen extends State<SettingsScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Settings"),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          brightness: Theme.of(context).brightness,
         ),
         body: Column(children: [DarkModeSetting()]));
   }

@@ -58,6 +58,9 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
         appBar: AppBar(
           title:
               Text(_pokemon != null ? _pokemon.name.capitalize() : "Loading"),
+          backgroundColor: Theme.of(context).accentColor.withOpacity(.03),
+          elevation: 0,
+          brightness: Theme.of(context).brightness,
           actions: _pokemon != null
               ? <Widget>[
                   IconButton(
@@ -71,60 +74,67 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
                 ]
               : [],
         ),
-        body: _pokemon == null
-            ? Center(child: CircularProgressIndicator())
-            : ListView(children: <Widget>[
-                Container(
-                    height: 270,
-                    child: Stack(children: [
-                      Center(
-                          child: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: FadeInImage.assetNetwork(
-                            placeholder:
-                                String.fromCharCodes(kTransparentImage),
-                            image:
-                                "https://pokeres.bastionbot.org/images/pokemon/${_pokemon.id}.png"),
-                      )),
-                      Positioned(
-                        top: 20,
-                        left: 20,
-                        child: Text(
-                          "#${_pokemon.id}",
-                          style: TextStyle(
-                              fontSize: 26,
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ])),
-                InfoSection(title: "Evolution Chain"),
-                EvolutionChainTile(
-                    pokemonName: _pokemon.name,
-                    evolutionChain: _pokemon.evolutions.evolutionChain),
-                ...(_pokemon.types.length == 1
-                    ? [
-                        InfoSection(title: "Type Damage Relations"),
-                        TypesRelationsTile(type: _pokemon.types[0])
-                      ]
-                    : [
-                        InfoSection(title: "Type Damage Taken"),
-                        TypesRelationsTakenTile(
-                            types: _pokemon.types,
-                            combination:
-                                TypesModel.combineTypes(_pokemon.types)),
-                        ..._pokemon.types
-                            .expand((TypeModel type) => [
-                                  InfoSection(
-                                      title:
-                                          "Type Damage Given - ${type.name.capitalize()}"),
-                                  TypesRelationsGivenTile(
-                                    type: type,
-                                  )
-                                ])
-                            .toList()
-                      ])
-              ]));
+        body: Container(
+            color: Theme.of(context).accentColor.withOpacity(.03),
+            child: _pokemon == null
+                ? Center(child: CircularProgressIndicator())
+                : ListView(children: <Widget>[
+                    Container(
+                        height: 270,
+                        child: Stack(children: [
+                          Center(
+                              child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: FadeInImage.assetNetwork(
+                                placeholder:
+                                    String.fromCharCodes(kTransparentImage),
+                                image:
+                                    "https://pokeres.bastionbot.org/images/pokemon/${_pokemon.id}.png"),
+                          )),
+                          Positioned(
+                            top: 20,
+                            left: 20,
+                            child: Text(
+                              "#${_pokemon.id}",
+                              style: TextStyle(
+                                  fontSize: 26,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ])),
+                    InfoSection(
+                        title: "Evolution Chain",
+                        child: EvolutionChainTile(
+                            pokemonName: _pokemon.name,
+                            evolutionChain:
+                                _pokemon.evolutions.evolutionChain)),
+                    ...(_pokemon.types.length == 1
+                        ? [
+                            InfoSection(
+                                title: "Type Damage Relations",
+                                child: TypesRelationsTile(
+                                    type: _pokemon.types[0])),
+                          ]
+                        : [
+                            InfoSection(
+                                title: "Type Damage Taken",
+                                child: TypesRelationsTakenTile(
+                                    types: _pokemon.types,
+                                    combination: TypesModel.combineTypes(
+                                        _pokemon.types))),
+                            ..._pokemon.types
+                                .expand((TypeModel type) => [
+                                      InfoSection(
+                                          title:
+                                              "Type Damage Given - ${type.name.capitalize()}",
+                                          child: TypesRelationsGivenTile(
+                                            type: type,
+                                          )),
+                                    ])
+                                .toList()
+                          ])
+                  ])));
   }
 }
 

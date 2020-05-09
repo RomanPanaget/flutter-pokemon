@@ -64,8 +64,8 @@ class TypesRelationsTakenTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisSize: MainAxisSize.max, children: [
-      Expanded(flex: 3, child: _buildFrom()),
-      Expanded(flex: 2, child: _buildType()),
+      Expanded(flex: 2, child: _buildFrom()),
+      Expanded(flex: 1, child: _buildType()),
     ]);
   }
 }

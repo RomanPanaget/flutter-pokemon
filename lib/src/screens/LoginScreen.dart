@@ -14,6 +14,9 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Login"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        brightness: Theme.of(context).brightness,
       ),
       body: Center(
         child: Column(mainAxisSize: MainAxisSize.min, children: [

@@ -8,7 +8,12 @@ class PokemonListCard extends StatefulWidget {
   final bool isFav;
   final Function onFavPressed;
 
-  PokemonListCard({Key key, @required this.pokemon, @required this.isFav, @required this.onFavPressed}) : super(key: key);
+  PokemonListCard(
+      {Key key,
+      @required this.pokemon,
+      @required this.isFav,
+      @required this.onFavPressed})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PokemonListCardState();
@@ -49,10 +54,16 @@ class _PokemonListCardState extends State<PokemonListCard>
             _toggleFav();
           });
         },
-        child: Card(
-          elevation: 8,
+        child: Container(
           margin: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          shape: RoundedRectangleBorder(
+          decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, 21),
+                  blurRadius: 20,
+                  color: Colors.black.withOpacity(0.05))
+            ],
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           child: Stack(
@@ -85,8 +96,9 @@ class _PokemonListCardState extends State<PokemonListCard>
                             animation: _controller,
                             builder: (BuildContext context, Widget child) =>
                                 Opacity(
-                                    opacity:
-                                        _favTapped && widget.isFav ? _opacity.value : 0,
+                                    opacity: _favTapped && widget.isFav
+                                        ? _opacity.value
+                                        : 0,
                                     child: Center(
                                         child: Icon(
                                       Icons.favorite,
@@ -114,7 +126,9 @@ class _PokemonListCardState extends State<PokemonListCard>
                                 )),
                             IconButton(
                               icon: Icon(
-                                widget.isFav ? Icons.favorite : Icons.favorite_border,
+                                widget.isFav
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
                                 color: Colors.red,
                               ),
                               onPressed: () {
